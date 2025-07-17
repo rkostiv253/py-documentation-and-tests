@@ -71,7 +71,7 @@ class MovieImageUploadTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_superuser(
-            "admin@myproject.com", "password"
+            email="admin@myproject.com", password="password"
         )
         self.client.force_authenticate(self.user)
         self.movie = sample_movie()
@@ -170,7 +170,7 @@ class UnauthenticatedMovieApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class AuthenticatedBusApiTest(TestCase):
+class AuthenticatedMovieApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -217,7 +217,7 @@ class AuthenticatedBusApiTest(TestCase):
 
         self.assertIn(serializer_movie_genre1.data, response.data["results"])
         self.assertIn(serializer_movie_genre2.data, response.data["results"])
-        self.assertNotIn(serializer_without_genres, response.data["results"])
+        self.assertNotIn(serializer_without_genres.data, response.data["results"])
 
     def test_filter_movies_by_actors(self):
         movie_without_actors = sample_movie()
@@ -242,7 +242,7 @@ class AuthenticatedBusApiTest(TestCase):
 
         self.assertIn(serializer_movie_actor1.data, response.data["results"])
         self.assertIn(serializer_movie_actor2.data, response.data["results"])
-        self.assertNotIn(serializer_without_actors, response.data["results"])
+        self.assertNotIn(serializer_without_actors.data, response.data["results"])
 
 
     def test_retrieve_movie_details(self):
