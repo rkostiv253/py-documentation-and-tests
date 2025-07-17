@@ -194,7 +194,7 @@ class AuthenticatedBusApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["results"], serializer.data)
 
-    def filter_movies_by_genre(self):
+    def test_filter_movies_by_genre(self):
         movie_without_genres = sample_movie()
         movie_with_genre1 = sample_movie(title="Terminator 2")
         movie_with_genre2 = sample_movie(title="Inception")
@@ -219,7 +219,7 @@ class AuthenticatedBusApiTest(TestCase):
         self.assertIn(serializer_movie_genre2.data, response.data["results"])
         self.assertNotIn(serializer_without_genres, response.data["results"])
 
-    def filter_movies_by_actors(self, genre):
+    def test_filter_movies_by_actors(self):
         movie_without_actors = sample_movie()
         movie_with_actor1 = sample_movie(title="Terminator 2")
         movie_with_actor2 = sample_movie(title="Inception")
@@ -245,7 +245,7 @@ class AuthenticatedBusApiTest(TestCase):
         self.assertNotIn(serializer_without_actors, response.data["results"])
 
 
-    def retrieve_movie_details(self):
+    def test_retrieve_movie_details(self):
         movie = sample_movie()
         movie.genres.add(sample_genre())
         movie.actors.add(sample_actor())
@@ -264,8 +264,8 @@ class AuthenticatedBusApiTest(TestCase):
             "title": "Terminator 2",
             "description": "Movie about terminator",
             "duration": 150,
-            "genres": [sample_genre()],
-            "actors": [sample_actor()],
+            "genres": [sample_genre().id],
+            "actors": [sample_actor().id],
         }
 
         response = self.client.post(MOVIE_URL, payload)
